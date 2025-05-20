@@ -10,9 +10,10 @@ app.use(cors({
   credentials: true,
 }));
 
-app.get('/api/commbox-stats', async (req, res) => {
+// Utility to forward GET requests
+async function proxyGetRequest(targetUrl, req, res) {
   try {
-    const response = await fetch('https://api.commbox.xyz/stats/streamsSLAExceptions', {
+    const response = await fetch(targetUrl, {
       method: 'GET',
       headers: {
         'Authorization': req.headers.authorization || '',
@@ -24,10 +25,36 @@ app.get('/api/commbox-stats', async (req, res) => {
     res.status(response.status).json(data);
   } catch (error) {
     console.error('Proxy error:', error);
-    res.status(500).json({ error: 'Proxy failed' });
+    res.status(500).json({ error: 'Proxy request failed' });
   }
+}
+
+// Existing endpoint
+app.get('/api/commbox-stats', (req, res) => {
+  const url = 'https://api.commbox.xyz/stats/streamsSLAExceptions';
+  proxyGetRequest(url, req, res);
+});
+
+// 1. Get all managers
+app.get('/api/managers', (req, res) => {
+  const url = 'https://api.commbox.xyz/managers';
+  proxyGetRequest(url, req, res);
+});
+
+// 2. Get manager stats by ID
+app.get('/api/managers/:id/stats', (req, res) => {
+  const managerId = req.params.id;
+  const url = `https://api.commbox.xyz/managers/${managerId}/stats`;
+  proxyGetRequest(url, req, res);
+});
+
+// 3. Get manager presence by ID
+app.get('/api/managers/:id/presence', (req, res) => {
+  const managerId = req.params.id;
+  const url = `https://api.commbox.xyz/managers/${managerId}/presence`;
+  proxyGetRequest(url, req, res);
 });
 
 app.listen(PORT, () => {
-  console.log(`Proxy server listening on port ${PORT}`);
+  console.log(`Proxy server running on port ${PORT}`);
 });
