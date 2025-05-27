@@ -16,7 +16,7 @@ async function proxyGetRequest(targetUrl, req, res) {
     const response = await fetch(targetUrl, {
       method: 'GET',
       headers: {
-        'Authorization': req.headers.authorization || '',
+        'Authorization': 'Bearer ' + req.headers.authorization || '',
         'Content-Type': 'application/json'
       }
     });
@@ -37,6 +37,7 @@ app.get('/api/commbox-stats', (req, res) => {
 
 // 1. Get all managers
 app.get('/api/managers', (req, res) => {
+  console.log('Authorization header received:', req.headers.authorization); // Debug
   const url = 'https://api.commbox.io/managers';
   proxyGetRequest(url, req, res);
 });
