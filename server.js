@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'https://bumpyard.commbox.io/',
+  origin: 'https://bumpyard.commbox.io',
   credentials: true,
 }));
 
