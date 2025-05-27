@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'https://yechiel.bumpyarddev.com',
+  origin: 'https://bumpyard.commbox.io/',
   credentials: true,
 }));
 
@@ -31,27 +31,27 @@ async function proxyGetRequest(targetUrl, req, res) {
 
 // Existing endpoint
 app.get('/api/commbox-stats', (req, res) => {
-  const url = 'https://api.commbox.xyz/stats/streamsSLAExceptions';
+  const url = 'https://api.commbox.io/stats/streamsSLAExceptions';
   proxyGetRequest(url, req, res);
 });
 
 // 1. Get all managers
 app.get('/api/managers', (req, res) => {
-  const url = 'https://api.commbox.xyz/managers';
+  const url = 'https://api.commbox.io/managers';
   proxyGetRequest(url, req, res);
 });
 
 // 2. Get manager stats by ID
 app.get('/api/managers/:id/stats', (req, res) => {
   const managerId = req.params.id;
-  const url = `https://api.commbox.xyz/managers/${managerId}/stats`;
+  const url = `https://api.commbox.io/managers/${managerId}/stats`;
   proxyGetRequest(url, req, res);
 });
 
 // 3. Get manager presence by ID
 app.get('/api/managers/:id/presence', (req, res) => {
   const managerId = req.params.id;
-  const url = `https://api.commbox.xyz/managers/${managerId}/presence`;
+  const url = `https://api.commbox.io/managers/${managerId}/presence`;
   proxyGetRequest(url, req, res);
 });
 
